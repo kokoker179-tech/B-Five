@@ -169,7 +169,7 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
             <div className="absolute inset-0 bg-primary/20 blur-[120px] rounded-full opacity-0 group-hover:opacity-40 transition-opacity duration-1000" />
             <div className="relative rounded-[40px] overflow-hidden border border-white/10 bg-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.6)] aspect-video md:aspect-[21/9]">
               <img 
-                src="https://storage.googleapis.com/static-ais-pre-4br5lx3hdrgwtf5wqsfzku-20904503405.europe-west3.run.app/uploads/e1897bf1-ec64-4679-8ce3-3db17f185aaf/image.png" 
+                src="https://i.postimg.cc/0y2k2jqr/7B5AFF74-0FC5-4FA7-98F4-2985E14DF002.jpg" 
                 alt="B-Five Brand Image" 
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[3s] ease-out"
                 referrerPolicy="no-referrer"
@@ -183,15 +183,6 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
               />
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent" />
               
-              <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-6 md:gap-12">
-                <motion.button 
-                  whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(255,122,0,0.6)' }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-10 md:px-16 py-4 md:py-6 bg-primary text-black font-black uppercase tracking-[2px] md:tracking-[4px] text-xs rounded-full shadow-2xl"
-                >
-                  اكتشف الآن
-                </motion.button>
-              </div>
             </div>
           </motion.div>
         </div>

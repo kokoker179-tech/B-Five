@@ -213,9 +213,13 @@ function AppContent({
               <div className="flex items-center gap-12">
                 <div className="flex items-center gap-4 md:gap-0">
                   <Link to="/" className="text-xl md:text-2xl font-black tracking-tighter uppercase group/logo flex items-center gap-2">
-                    <div className="w-7 h-7 md:w-8 md:h-8 rounded-lg bg-primary flex items-center justify-center text-black rotate-3 group-hover/logo:rotate-12 transition-transform">
-                      <span className="font-black text-base md:text-lg italic">B</span>
-                    </div>
+                    <img 
+                      src="https://i.postimg.cc/K3xCgz0T/63CB6624-3D90-4E08-8064-2535C7F154CD.png"
+                      alt="B-Five Logo"
+                      className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-md"
+                      referrerPolicy="no-referrer"
+                      style={{ display: 'block' }}
+                    />
                     <span className="hidden sm:inline">B-Five</span>
                   </Link>
                 </div>
