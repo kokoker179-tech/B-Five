@@ -323,11 +323,7 @@ function AppContent({
         </nav>
         
         <main className="flex-grow">
-          <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center">
-              <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          }>
+          <Suspense fallback={null}>
             <Routes>
               <Route path="/" element={<Home products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} cartCount={cartCount} />} />
               <Route path="/products" element={<ProductsPage products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} />} />
