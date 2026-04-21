@@ -9,6 +9,9 @@ export const AdminPage: React.FC = () => {
   const ADMIN_EMAIL = 'kokoker179@gmail.com';
 
   useEffect(() => {
+    // Wait until user is fully loaded, then check email
+    if (user === undefined) return; // Still loading
+
     if (!user || user.email !== ADMIN_EMAIL) {
       navigate('/');
     }
