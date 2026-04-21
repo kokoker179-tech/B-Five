@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -12,16 +12,19 @@ import {
 } from 'lucide-react';
 import { CartDrawer } from './components/CartDrawer';
 import { ProductDetailsModal } from './components/ProductDetailsModal';
-import { Home } from './pages/Home';
-import { ProductsPage } from './pages/ProductsPage';
-import { OffersPage } from './pages/OffersPage';
-import { ContactPage } from './pages/ContactPage';
-import { CheckoutPage } from './pages/CheckoutPage';
-import { AuthPage } from './pages/AuthPage';
-import { ProfilePage } from './pages/ProfilePage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import type { Product, CartItem } from './types';
 import { Toaster, toast } from 'sonner';
+
+// Lazy loading pages
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
+const ProductsPage = lazy(() => import('./pages/ProductsPage').then(m => ({ default: m.ProductsPage })));
+const OffersPage = lazy(() => import('./pages/OffersPage').then(m => ({ default: m.OffersPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ default: m.ContactPage })));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage').then(m => ({ default: m.CheckoutPage })));
+const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
+const ProfilePage = lazy(() => import('./pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
 
 // Mock Data
 const PRODUCTS: Product[] = [
@@ -320,15 +323,22 @@ function AppContent({
         </nav>
         
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} cartCount={cartCount} />} />
-            <Route path="/products" element={<ProductsPage products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} />} />
-            <Route path="/offers" element={<OffersPage products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/checkout" element={<CheckoutPage cartItems={cartItems} total={cartTotal} clearCart={clearCart} />} />
-            <Route path="/auth" element={<AuthPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
+          <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center">
+              <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          }>
+            <Routes>
+              <Route path="/" element={<Home products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} cartCount={cartCount} />} />
+              <Route path="/products" element={<ProductsPage products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} />} />
+              <Route path="/offers" element={<OffersPage products={PRODUCTS} onAddToCart={addToCart} onViewDetails={handleViewDetails} />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/checkout" element={<CheckoutPage cartItems={cartItems} total={cartTotal} clearCart={clearCart} />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/admin" element={<AdminPage />} />
+            </Routes>
+          </Suspense>
         </main>
 
         <ProductDetailsModal 
