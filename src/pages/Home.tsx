@@ -28,7 +28,7 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
           >
             <div className="relative inline-block">
               {/* Modern Zigzag Lines */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[140%] w-[120%] h-40 opacity-20 pointer-events-none z-0">
+              <div className="absolute top-[0%] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:-translate-y-[140%] w-[120%] h-40 opacity-20 pointer-events-none z-0">
                 <svg viewBox="0 0 400 100" className="w-full h-full">
                   <motion.path
                     d="M 0 50 Q 25 25 50 50 T 100 50 T 150 50 T 200 50 T 250 50 T 300 50 T 350 50 T 400 50"
@@ -60,7 +60,7 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
               >
                 مكانك الأول في التسوق
               </motion.span>
-              <h1 className="text-[80px] md:text-[220px] font-black leading-[0.8] tracking-[-0.05em] uppercase text-white mb-4">
+              <h1 className="text-[80px] md:text-[220px] font-black leading-[0.8] tracking-[-0.05em] uppercase text-white mb-4 md:mt-32">
                 B-Five
               </h1>
               

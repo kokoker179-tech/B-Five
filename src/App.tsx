@@ -1,11 +1,11 @@
 import React, { useState, useRef, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink, useNavigate, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ShoppingBag, 
   Search, 
   Menu, 
-  Home,
+  Home as HomeIcon,
   X,
   User as UserIcon,
   LogOut
@@ -211,22 +211,10 @@ function AppContent({
               <div className="absolute -bottom-1 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
               
               <div className="flex items-center gap-12">
-                <div className="flex items-center gap-4 md:gap-0">
-                  <Link to="/" className="text-xl md:text-2xl font-black tracking-tighter uppercase group/logo flex items-center gap-2">
-                    <img 
-                      src="https://i.postimg.cc/K3xCgz0T/63CB6624-3D90-4E08-8064-2535C7F154CD.png"
-                      alt="B-Five Logo"
-                      className="w-10 h-10 md:w-12 md:h-12 object-contain drop-shadow-md"
-                      referrerPolicy="no-referrer"
-                      style={{ display: 'block' }}
-                    />
-                    <span className="hidden sm:inline">B-Five</span>
-                  </Link>
-                </div>
-                <div className="flex items-center gap-8 text-[16px] font-black uppercase tracking-[2px] text-white">
-                  <NavLink to="/" className={({ isActive }) => isActive ? "text-primary relative py-2" : "hover:text-primary transition-colors py-2"}>
+                <div className="flex items-center gap-6 text-[12px] font-black uppercase tracking-[1px] text-white">
+                  <NavLink to="/" className={({ isActive }) => `mr-[-22px] ${isActive ? "text-primary relative py-1" : "hover:text-primary transition-colors py-1"}`}>
                     الرئيسية
-                    <div className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-primary scale-x-0 transition-transform origin-right group-hover:scale-x-100"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-primary scale-x-0 transition-transform origin-right group-hover:scale-x-100"></div>
                   </NavLink>
                   <NavLink to="/products" className={({ isActive }) => isActive ? "text-primary transition-colors" : "hover:text-primary transition-colors"}>المنتجات</NavLink>
                   <NavLink to="/offers" className={({ isActive }) => isActive ? "text-primary transition-colors" : "hover:text-primary transition-colors"}>العروض</NavLink>
@@ -241,10 +229,10 @@ function AppContent({
                     <motion.div 
                       whileHover={{ scale: 1.05 }}
                       onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                      className="flex items-center gap-2 bg-white/5 pl-4 pr-1 py-1 border border-white/10 rounded-full cursor-pointer hover:bg-white/10 transition-colors"
+                      className="mr-[25px] flex items-center gap-2 bg-white/5 pl-4 pr-1 py-1 border border-white/10 rounded-full cursor-pointer hover:bg-white/10 transition-colors"
                     >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-orange-400 flex items-center justify-center text-black shadow-lg">
-                        <UserIcon size={14} />
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-primary to-orange-400 flex items-center justify-center text-black shadow-lg">
+                        <UserIcon size={12} />
                       </div>
                       <span className="text-[9px] font-black uppercase tracking-widest hidden lg:block">
                         {profile?.displayName || user.displayName}
@@ -285,7 +273,7 @@ function AppContent({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate('/auth')}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-white text-black text-[10px] font-black uppercase tracking-[2px] rounded-full hover:bg-primary transition-colors"
+                    className="flex items-center gap-2 px-6 py-2.5 bg-white text-black text-[10px] font-black uppercase tracking-[2px] rounded-full hover:bg-primary transition-colors mr-4 md:mr-0"
                   >
                     <UserIcon size={14} />
                     <span className="hidden sm:inline">تسجيل الدخول</span>
@@ -294,37 +282,39 @@ function AppContent({
 
                 <motion.button 
                   whileHover={{ scale: 1.1 }}
-                  className="p-2 text-white/50 hover:text-white transition-colors hidden sm:flex"
+                  className="mr-[19px] p-2 text-white/50 hover:text-white transition-colors hidden sm:flex"
                 >
-                  <Search size={20} />
+                  <Search size={20} className="pb-0" />
                 </motion.button>
                 
-                <div className="relative -ml-[6px] mt-0" ref={cartIconRef}>
-                  <motion.button 
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setIsCartOpen(true)}
-                    className="w-11 h-11 bg-primary text-black rounded-2xl flex items-center justify-center relative shadow-lg shadow-primary/20 -ml-[18px]"
-                  >
-                    <ShoppingBag size={20} className="stroke-[2.5px]" />
-                    <AnimatePresence>
-                      {cartCount > 0 && (
-                        <motion.span 
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          exit={{ scale: 0 }}
-                          className="absolute -top-1.5 -right-1.5 bg-white text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-primary"
-                        >
-                          {cartCount}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </motion.button>
-                </div>
               </div>
             </div>
           </div>
         </nav>
+        
+        {/* Floating Cart Button */}
+        <motion.button 
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => setIsCartOpen(true)}
+          className="fixed bottom-24 right-6 z-[150] w-14 h-14 bg-primary text-black rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(255,122,0,0.4)] border-4 border-[#0c0c0c]"
+        >
+          <ShoppingBag size={24} className="stroke-[2.5px]" />
+          <AnimatePresence>
+            {cartCount > 0 && (
+              <motion.span 
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                className="absolute -top-1 -right-1 bg-white text-black text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-[#0c0c0c]"
+              >
+                {cartCount}
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </motion.button>
         
         <main className="flex-grow">
           <Suspense fallback={null}>
@@ -337,6 +327,8 @@ function AppContent({
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/admin" element={<AdminPage />} />
+              {/* Catch-all route to prevent 404 pages */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
         </main>
@@ -354,7 +346,8 @@ function AppContent({
                 B-Five
               </Link>
               {/* Desktop Footer Links */}
-              <div className="hidden md:flex flex-col items-center gap-2 text-[11px] font-bold uppercase tracking-widest">
+              <div className="hidden md:flex flex-col items-start gap-2 text-[11px] font-bold uppercase tracking-widest pl-8">
+                <Link to="/" className="hover:text-primary transition-colors py-1">الرئيسية</Link>
                 <Link to="/products" className="hover:text-primary transition-colors py-1">المنتجات</Link>
                 <Link to="/offers" className="hover:text-primary transition-colors py-1">العروض</Link>
                 <Link to="/contact" className="hover:text-primary transition-colors py-1">تواصل معنا</Link>
@@ -363,7 +356,7 @@ function AppContent({
               {/* Mobile/Tablet Footer Icons */}
               <div className="md:hidden flex items-center justify-around w-full gap-4 text-[9px] font-bold uppercase tracking-widest">
                 <Link to="/" className="flex flex-col items-center gap-1 hover:text-primary transition-colors">
-                  <div className="p-2 bg-white/5 rounded-full"><Home size={16} /></div>
+                  <div className="p-2 bg-white/5 rounded-full"><HomeIcon size={16} /></div>
                   <span>الرئيسية</span>
                 </Link>
                 <Link to="/products" className="flex flex-col items-center gap-1 hover:text-primary transition-colors">
@@ -453,7 +446,7 @@ function AppContent({
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-8 items-start pl-8">
                   {[
                     { label: 'الرئيسية', path: '/' },
                     { label: 'المنتجات', path: '/products' },
@@ -470,7 +463,7 @@ function AppContent({
                         to={link.path}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={({ isActive }) => 
-                          `text-4xl font-black uppercase tracking-tighter transition-all ${isActive ? 'text-primary italic scale-105' : 'text-white/40 hover:text-white'}`
+                          `text-2xl font-black uppercase tracking-tighter transition-all ${isActive ? 'text-primary italic scale-105' : 'text-white/40 hover:text-white'}`
                         }
                       >
                         {link.label}
