@@ -341,7 +341,10 @@ function AppContent({
         <footer className="bg-black text-white/40 py-12">
           <div className="max-w-7xl mx-auto px-6 md:px-10 flex flex-col items-center gap-8">
             <div className="flex flex-col items-center gap-4 text-center">
-              <Link to="/" className="text-xl font-black text-white uppercase tracking-tighter">
+              <Link 
+                to="/" 
+                className="text-xl font-black text-white uppercase tracking-tighter"
+              >
                 B-Five
               </Link>
               {/* Desktop Footer Links */}

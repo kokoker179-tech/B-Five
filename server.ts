@@ -16,11 +16,24 @@ async function startServer() {
       appType: "spa",
     });
     app.use(vite.middlewares);
+
+    // Fallback to avoid DEV 404 pages
+    app.use('*all', async (req, res, next) => {
+      try {
+        const url = req.originalUrl;
+        const indexHtml = path.resolve(__dirname, 'index.html');
+        res.sendFile(indexHtml);
+      } catch (e) {
+        vite.ssrFixStacktrace(e as Error);
+        next(e);
+      }
+    });
+
   } else {
     // Production static file serving
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.get('*all', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
