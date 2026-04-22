@@ -1,5 +1,5 @@
 import React, { useState, useRef, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, NavLink, useNavigate, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link, NavLink, useNavigate, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   ShoppingBag, 
