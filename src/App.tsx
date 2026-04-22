@@ -16,7 +16,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import type { Product, CartItem } from './types';
 import { Toaster, toast } from 'sonner';
 
-// Lazy loading pages
+import { AdminPage } from './pages/AdminPage';
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
 const ProductsPage = lazy(() => import('./pages/ProductsPage').then(m => ({ default: m.ProductsPage })));
 const OffersPage = lazy(() => import('./pages/OffersPage').then(m => ({ default: m.OffersPage })));
@@ -24,7 +24,6 @@ const ContactPage = lazy(() => import('./pages/ContactPage').then(m => ({ defaul
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage').then(m => ({ default: m.CheckoutPage })));
 const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
 const ProfilePage = lazy(() => import('./pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
-const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
 
 // Mock Data
 const PRODUCTS: Product[] = [
