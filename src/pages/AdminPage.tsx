@@ -8,27 +8,20 @@ import { db } from '../lib/firebase';
 import { toast } from 'sonner';
 
 export const AdminPage: React.FC = () => {
-  const { user, loading, resetPassword } = useAuth();
+  const { resetPassword } = useAuth();
   const navigate = useNavigate();
-  const ADMIN_EMAIL = 'kokoker179@gmail.com';
   
   const [activeTab, setActiveTab] = useState<'products' | 'customers'>('products');
   const [customers, setCustomers] = useState<any[]>([]);
   const [loadingCustomers, setLoadingCustomers] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [isAdminVerified, setIsAdminVerified] = useState(false);
   
   useEffect(() => {
-    if (!loading) {
-      if (!user || user.email !== ADMIN_EMAIL) {
-        navigate('/');
-      }
-    }
-  }, [user, loading, navigate]);
-  
-  useEffect(() => {
-    if (activeTab === 'customers' && user?.email === ADMIN_EMAIL) {
+    if (activeTab === 'customers' && isAdminVerified) {
       fetchCustomers();
     }
-  }, [activeTab, user]);
+  }, [activeTab, isAdminVerified]);
 
   const fetchCustomers = async () => {
     setLoadingCustomers(true);
@@ -57,8 +50,49 @@ export const AdminPage: React.FC = () => {
     }
   };
 
-  if (loading || !user) {
-    return <div className="min-h-screen bg-dark-bg flex items-center justify-center"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div></div>;
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === 'kerolos1122') {
+      setIsAdminVerified(true);
+      toast.success('تم الدخول كمدير للنظام');
+    } else {
+      toast.error('كلمة المرور غير صحيحة');
+    }
+  };
+
+  if (!isAdminVerified) {
+    return (
+      <div className="min-h-screen bg-dark-bg flex flex-col items-center justify-center p-8 text-white text-center" dir="rtl">
+        <LayoutDashboard className="text-primary mb-6" size={64} />
+        <h1 className="text-4xl font-black uppercase mb-4 text-white">تسجيل دخول الإدارة</h1>
+        <p className="text-md text-white/40 mb-8 max-w-sm">
+          برجاء إدخال كلمة المرور السريّة للوصول إلى لوحة التحكم
+        </p>
+        <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-xs">
+          <input 
+            type="password" 
+            value={passwordInput} 
+            onChange={(e) => setPasswordInput(e.target.value)} 
+            placeholder="كلمة المرور" 
+            className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-center text-white focus:outline-none focus:border-primary transition-colors tracking-widest text-lg" 
+            dir="ltr" 
+            autoFocus
+          />
+          <button 
+            type="submit" 
+            className="bg-primary text-black px-8 py-3 rounded-xl font-black hover:scale-105 transition-transform w-full shadow-[0_0_20px_rgba(255,122,0,0.3)]"
+          >
+            دخول للوحة
+          </button>
+        </form>
+        <button 
+          onClick={() => navigate('/')} 
+          className="mt-6 text-white/40 hover:text-white text-sm underline transition-colors"
+        >
+          العودة للمتجر
+        </button>
+      </div>
+    );
   }
 
   return (

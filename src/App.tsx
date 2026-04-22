@@ -252,14 +252,6 @@ function AppContent({
                           >
                             عرض الملف الشخصي
                           </button>
-                          {user.email === 'kokoker179@gmail.com' && (
-                            <button 
-                              onClick={() => { setIsProfileMenuOpen(false); navigate('/admin'); }}
-                              className="w-full text-right p-3 hover:bg-white/5 rounded-xl text-[10px] font-black uppercase tracking-[2px] transition-colors text-primary"
-                            >
-                              لوحة التحكم
-                            </button>
-                          )}
                           <button 
                             onClick={() => {
                               setIsProfileMenuOpen(false);
