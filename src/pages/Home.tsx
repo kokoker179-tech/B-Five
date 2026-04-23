@@ -73,9 +73,9 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
                     x: [-5, 5, -5] 
                   }}
                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-16 -left-16 md:-top-8 md:-left-80 z-30 pointer-events-auto"
+                  className="absolute -top-16 -left-12 md:-top-8 md:-left-80 z-30 pointer-events-auto"
                 >
-                  <div className="relative flex items-center bg-white rounded-full px-3 py-1.5 md:px-6 md:py-3 shadow-[0_15px_40px_rgba(0,0,0,0.5)] border border-white/20 scale-[0.4] md:scale-100 origin-left">
+                  <div className="relative flex items-center bg-white rounded-full px-3 py-1.5 md:px-6 md:py-3 shadow-[0_15px_40px_rgba(0,0,0,0.5)] border border-white/20 scale-[0.65] md:scale-100 origin-left">
                     <div className="flex gap-1 md:gap-1.5 mr-2">
                       <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#4285F4]"></span>
                       <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#EA4335]"></span>
@@ -106,12 +106,12 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
                     rotate: [0, -5, 5, 0]
                   }}
                   transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="absolute top-24 -left-10 md:top-52 md:-left-60 z-20 origin-left pointer-events-auto"
+                  className="absolute top-24 -left-6 md:top-52 md:-left-60 z-20 origin-left pointer-events-auto"
                 >
                   <img 
                     src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Shopping%20bags/3D/shopping_bags_3d.png" 
                     alt="3D Shopping Bags"
-                    className="w-[50px] h-[50px] md:w-[160px] md:h-[160px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] select-none pointer-events-none scale-75 md:scale-100"
+                    className="w-[75px] h-[75px] md:w-[160px] md:h-[160px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.3)] select-none pointer-events-none scale-[0.85] md:scale-100"
                     referrerPolicy="no-referrer"
                   />
                 </motion.div>
@@ -123,14 +123,14 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
                     rotate: [0, 5, -5, 0]
                   }}
                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-16 -right-16 md:-top-28 md:-right-64 z-30 origin-right pointer-events-auto"
+                  className="absolute -top-16 -right-10 md:-top-28 md:-right-64 z-30 origin-right pointer-events-auto"
                 >
-                  <div className="relative group scale-[0.5] md:scale-100">
+                  <div className="relative group scale-[0.65] md:scale-100">
                     <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full scale-125 opacity-30" />
                     <img 
                       src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Shopping%20cart/3D/shopping_cart_3d.png" 
                       alt="3D Shopping Cart"
-                      className="w-[90px] h-[90px] md:w-[180px] md:h-[180px] drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)] relative z-10 select-none pointer-events-none"
+                      className="w-[100px] h-[100px] md:w-[180px] md:h-[180px] drop-shadow-[0_30px_60px_rgba(0,0,0,0.5)] relative z-10 select-none pointer-events-none"
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute top-0 right-0 w-8 h-8 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center shadow-xl z-20 border-2 border-primary">
@@ -147,12 +147,12 @@ export const Home: React.FC<HomeProps> = ({ products, onAddToCart, onViewDetails
                     y: [5, -5, 5]
                   }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                  className="absolute top-24 -right-10 md:top-52 md:-right-60 z-20 origin-right pointer-events-auto"
+                  className="absolute top-24 -right-6 md:top-52 md:-right-60 z-20 origin-right pointer-events-auto"
                 >
                   <img 
                     src="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Package/3D/package_3d.png" 
                     alt="3D Package"
-                    className="w-12 h-12 md:w-36 md:h-36 drop-shadow-[0_15px_30px_rgba(255,122,0,0.2)] select-none pointer-events-none scale-75 md:scale-100"
+                    className="w-[70px] h-[70px] md:w-36 md:h-36 drop-shadow-[0_15px_30px_rgba(255,122,0,0.2)] select-none pointer-events-none scale-[0.85] md:scale-100"
                     referrerPolicy="no-referrer"
                   />
                 </motion.div>

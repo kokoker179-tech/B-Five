@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Users, ShoppingBag, DollarSign, PackagePlus, Pencil, Trash2, KeyRound } from 'lucide-react';
 import { motion } from 'motion/react';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { auth, db } from '../lib/firebase';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { toast } from 'sonner';
 
 export const AdminPage: React.FC = () => {
@@ -16,6 +17,7 @@ export const AdminPage: React.FC = () => {
   const [loadingCustomers, setLoadingCustomers] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [isAdminVerified, setIsAdminVerified] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   
   useEffect(() => {
     if (activeTab === 'customers' && isAdminVerified) {
@@ -35,7 +37,7 @@ export const AdminPage: React.FC = () => {
       setCustomers(usersData);
     } catch (error) {
       console.error("Error fetching customers:", error);
-      toast.error('حدث خطأ أثناء جلب بيانات العملاء');
+      toast.error('حدث خطأ أثناء جلب بيانات العملاء. المرجو التأكد من صلاحيات المدير.');
     } finally {
       setLoadingCustomers(false);
     }
@@ -50,11 +52,40 @@ export const AdminPage: React.FC = () => {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleChangeCustomerPasswordDirectly = async () => {
+    // Explanation: Changing another user's password directly from client SDK is mathematically impossible 
+    // without Firebase Admin SDK running on a secure backend server. We will show a toast message.
+    toast.error('لتغيير كلمة سر عميل آخر مباشرة، فضلاً أرسل له رابط إعادة التعيين.', {
+      description: 'حماية فايربيس تمنع تغيير بيانات دخول عميل آخر من التطبيق حرصاً على الأمان.'
+    });
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (passwordInput === 'kerolos1122') {
-      setIsAdminVerified(true);
-      toast.success('تم الدخول كمدير للنظام');
+      setIsLoggingIn(true);
+      const adminEmail = 'admin@b-five.io';
+      try {
+        await signInWithEmailAndPassword(auth, adminEmail, passwordInput);
+        setIsAdminVerified(true);
+        toast.success('تم التأكد من صلاحيات المدير عبر الخادم');
+      } catch (error: any) {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+          try {
+            await createUserWithEmailAndPassword(auth, adminEmail, passwordInput);
+            setIsAdminVerified(true);
+            toast.success('تم تفعيل حساب الإدارة والدخول بنجاح');
+          } catch (createError) {
+            console.error('Error creating admin account:', createError);
+            toast.error('حدث خطأ في مزامنة حساب الإدارة.');
+          }
+        } else {
+          console.error('Error signing in as admin:', error);
+          toast.error('حدث خطأ أثناء الاتصال بالخادم. حاول مجدداً.');
+        }
+      } finally {
+        setIsLoggingIn(false);
+      }
     } else {
       toast.error('كلمة المرور غير صحيحة');
     }
@@ -247,14 +278,21 @@ export const AdminPage: React.FC = () => {
                         <td className="p-5 text-white/60 font-mono text-xs">{customer.email}</td>
                         <td className="p-5 text-white/60 font-mono text-xs" dir="ltr">{customer.phone || 'غير محدد'}</td>
                         <td className="p-5">
-                          <div className="flex items-center justify-center">
+                          <div className="flex flex-col items-center justify-center gap-2">
                             <button 
                               onClick={() => handleSendPasswordReset(customer.email)}
-                              className="flex items-center gap-2 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 px-3 py-1.5 rounded-lg text-xs font-black transition-colors"
-                              title="لأسباب تقنية وأمنية، يتم إرسال رابط للعميل لتغيير كلمة المرور بنفسه بدلاً من تغييرها برمجياً"
+                              className="flex items-center justify-center gap-2 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20 px-3 py-1.5 rounded-lg text-xs font-black transition-colors w-full"
+                              title="إرسال رابط آمن للعميل"
                             >
                               <KeyRound size={14} />
-                              إرسال رابط ضبط الباسورد
+                              رابط ضبط كلمة المرور
+                            </button>
+                            <button 
+                              onClick={handleChangeCustomerPasswordDirectly}
+                              className="flex items-center justify-center gap-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg text-xs font-black transition-colors w-full"
+                            >
+                              <Pencil size={14} />
+                              تغيير الباسورد مباشرة
                             </button>
                           </div>
                         </td>

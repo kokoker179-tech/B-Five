@@ -1,6 +1,7 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,11 +19,13 @@ async function startServer() {
     app.use(vite.middlewares);
 
     // Fallback to avoid DEV 404 pages
-    app.use('*all', async (req, res, next) => {
+    app.use('*', async (req, res, next) => {
       try {
         const url = req.originalUrl;
-        const indexHtml = path.resolve(__dirname, 'index.html');
-        res.sendFile(indexHtml);
+        const indexHtmlPath = path.resolve(__dirname, 'index.html');
+        let template = fs.readFileSync(indexHtmlPath, 'utf-8');
+        template = await vite.transformIndexHtml(url, template);
+        res.status(200).set({ 'Content-Type': 'text/html' }).end(template);
       } catch (e) {
         vite.ssrFixStacktrace(e as Error);
         next(e);
@@ -33,7 +36,7 @@ async function startServer() {
     // Production static file serving
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*all', (req, res) => {
+    app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
