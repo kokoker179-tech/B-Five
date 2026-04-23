@@ -3,12 +3,42 @@ import { createServer as createViteServer } from "vite";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+
+// Initialize Firebase Admin
+const serviceAccount = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'service-account.json'), 'utf-8'));
+initializeApp({
+  credential: cert(serviceAccount)
+});
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 async function startServer() {
   const app = express();
+  app.use(express.json()); // Need to parse JSON bodies
   const PORT = 3000;
+
+  // Admin route to update password
+  app.post('/api/admin/change-password', async (req, res) => {
+    const { email, newPassword, adminSecret } = req.body;
+    
+    // Simple secret check (should be more secure in real production)
+    if (adminSecret !== 'kerolos1122') {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
+    try {
+      const userRecord = await getAuth().getUserByEmail(email);
+      await getAuth().updateUser(userRecord.uid, {
+        password: newPassword
+      });
+      res.json({ success: true, message: 'Password updated successfully' });
+    } catch (error: any) {
+      console.error('Error updating password:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

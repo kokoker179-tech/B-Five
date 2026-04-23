@@ -52,12 +52,31 @@ export const AdminPage: React.FC = () => {
     }
   };
 
-  const handleChangeCustomerPasswordDirectly = async () => {
-    // Explanation: Changing another user's password directly from client SDK is mathematically impossible 
-    // without Firebase Admin SDK running on a secure backend server. We will show a toast message.
-    toast.error('لتغيير كلمة سر عميل آخر مباشرة، فضلاً أرسل له رابط إعادة التعيين.', {
-      description: 'حماية فايربيس تمنع تغيير بيانات دخول عميل آخر من التطبيق حرصاً على الأمان.'
-    });
+  const handleChangeCustomerPasswordDirectly = async (email: string) => {
+    const newPassword = window.prompt("أدخل كلمة المرور الجديدة للعميل:");
+    if (!newPassword || newPassword.length < 6) {
+      toast.error("كلمة المرور يجب أن تكون 6 أحرف على الأقل.");
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, newPassword, adminSecret: 'kerolos1122' }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(`تم تغيير كلمة سر العميل ${email} بنجاح!`);
+      } else {
+        toast.error(`خطأ: ${data.error || 'فشل تغيير كلمة السر'}`);
+      }
+    } catch (error) {
+      toast.error('لم يتم الاتصال بالسيرفر. حاول مرة أخرى.');
+    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -288,7 +307,7 @@ export const AdminPage: React.FC = () => {
                               رابط ضبط كلمة المرور
                             </button>
                             <button 
-                              onClick={handleChangeCustomerPasswordDirectly}
+                              onClick={() => handleChangeCustomerPasswordDirectly(customer.email)}
                               className="flex items-center justify-center gap-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 px-3 py-1.5 rounded-lg text-xs font-black transition-colors w-full"
                             >
                               <Pencil size={14} />
