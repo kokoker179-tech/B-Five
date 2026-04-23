@@ -95,10 +95,14 @@ export const AdminPage: React.FC = () => {
       setIsLoggingIn(true);
       const adminEmail = 'admin@b-five.io';
       try {
+        // Try to sign in. If it fails, it might be that the user doesn't exist.
         await signInWithEmailAndPassword(auth, adminEmail, passwordInput);
         setIsAdminVerified(true);
-        toast.success('تم التأكد من صلاحيات المدير عبر الخادم');
+        toast.success('تم الدخول كمدير للنظام');
       } catch (error: any) {
+        console.error('Error signing in as admin:', error);
+        
+        // If user doesn't exist, try to create it automatically
         if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
           try {
             await createUserWithEmailAndPassword(auth, adminEmail, passwordInput);
@@ -106,10 +110,9 @@ export const AdminPage: React.FC = () => {
             toast.success('تم تفعيل حساب الإدارة والدخول بنجاح');
           } catch (createError) {
             console.error('Error creating admin account:', createError);
-            toast.error('حدث خطأ في مزامنة حساب الإدارة.');
+            toast.error('كلمة المرور صحيحة لكن حدث خطأ في النظام.');
           }
         } else {
-          console.error('Error signing in as admin:', error);
           toast.error('حدث خطأ أثناء الاتصال بالخادم. حاول مجدداً.');
         }
       } finally {
