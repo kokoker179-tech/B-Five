@@ -68,7 +68,16 @@ export const AdminPage: React.FC = () => {
         body: JSON.stringify({ email, newPassword, adminSecret: 'kerolos1122' }),
       });
 
-      const data = await response.json();
+      let data;
+      const textResponse = await response.text();
+      try {
+        data = JSON.parse(textResponse);
+      } catch (e) {
+        console.error("Non-JSON response from server:", textResponse);
+        toast.error(`خطأ سيرفر غير متوقع. افتح Console لمزيد من التفاصيل.`);
+        return;
+      }
+
       if (response.ok) {
         toast.success(`تم تغيير كلمة سر العميل ${email} بنجاح!`);
       } else {
