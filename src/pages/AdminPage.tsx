@@ -74,7 +74,8 @@ export const AdminPage: React.FC = () => {
         data = JSON.parse(textResponse);
       } catch (e) {
         console.error("Non-JSON response from server:", textResponse);
-        toast.error(`خطأ سيرفر غير متوقع. افتح Console لمزيد من التفاصيل.`);
+        const snippet = textResponse.substring(0, 100);
+        toast.error(`خطأ غير متوقع. استجابة السيرفر: ${snippet}`);
         return;
       }
 
