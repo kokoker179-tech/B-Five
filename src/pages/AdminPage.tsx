@@ -110,7 +110,7 @@ export const AdminPage: React.FC = () => {
             toast.success('تم تفعيل حساب الإدارة والدخول بنجاح');
           } catch (createError) {
             console.error('Error creating admin account:', createError);
-            toast.error('كلمة المرور صحيحة لكن حدث خطأ في النظام.');
+            toast.error('حدث خطأ أثناء مزامنة حساب الإدارة. الرجاء المحاولة مجدداً.');
           }
         } else {
           toast.error('حدث خطأ أثناء الاتصال بالخادم. حاول مجدداً.');
