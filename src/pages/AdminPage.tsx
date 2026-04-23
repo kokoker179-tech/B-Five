@@ -108,12 +108,12 @@ export const AdminPage: React.FC = () => {
             await createUserWithEmailAndPassword(auth, adminEmail, passwordInput);
             setIsAdminVerified(true);
             toast.success('تم تفعيل حساب الإدارة والدخول بنجاح');
-          } catch (createError) {
+          } catch (createError: any) {
             console.error('Error creating admin account:', createError);
-            toast.error('حدث خطأ أثناء مزامنة حساب الإدارة. الرجاء المحاولة مجدداً.');
+            toast.error(`خطأ إنشاء الحساب: ${createError.message || 'غير معروف'}`);
           }
         } else {
-          toast.error('حدث خطأ أثناء الاتصال بالخادم. حاول مجدداً.');
+          toast.error(`خطأ اتصال: ${error.message || 'غير معروف'}`);
         }
       } finally {
         setIsLoggingIn(false);
