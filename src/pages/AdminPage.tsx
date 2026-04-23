@@ -19,11 +19,36 @@ export const AdminPage: React.FC = () => {
   const [isAdminVerified, setIsAdminVerified] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   
+  const [products, setProducts] = useState<any[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  
   useEffect(() => {
-    if (activeTab === 'customers' && isAdminVerified) {
-      fetchCustomers();
+    if (isAdminVerified) {
+      if (activeTab === 'customers') {
+        fetchCustomers();
+      } else if (activeTab === 'products') {
+        fetchProducts();
+      }
     }
   }, [activeTab, isAdminVerified]);
+
+  const fetchProducts = async () => {
+    setLoadingProducts(true);
+    try {
+      const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      const data: any[] = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      toast.error('حدث خطأ أثناء جلب المنتجات.');
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
 
   const fetchCustomers = async () => {
     setLoadingCustomers(true);
@@ -231,31 +256,37 @@ export const AdminPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5 text-sm">
-                  {[1, 2, 3].map((item) => (
-                    <tr key={item} className="hover:bg-white/5 transition-colors group">
-                      <td className="p-5 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-white/10 overflow-hidden">
-                          <img src={`https://picsum.photos/seed/prod${item}/100/100`} alt="Product" className="w-full h-full object-cover" />
-                        </div>
-                        <span className="font-bold">منتج تجريبي {item}</span>
-                      </td>
-                      <td className="p-5 text-white/60">إلكترونيات</td>
-                      <td className="p-5 font-bold text-primary">٤٥٠ ج.م</td>
-                      <td className="p-5">
-                        <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-md text-xs font-bold">متوفر (١٢)</span>
-                      </td>
-                      <td className="p-5">
-                        <div className="flex items-center justify-center gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
-                          <button className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center hover:bg-blue-500/40 transition-colors">
-                            <Pencil size={14} />
-                          </button>
-                          <button className="w-8 h-8 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center hover:bg-red-500/40 transition-colors">
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {loadingProducts ? (
+                    <tr><td colSpan={5} className="p-8 text-center text-white/40">جاري جلب المنتجات...</td></tr>
+                  ) : products.length === 0 ? (
+                    <tr><td colSpan={5} className="p-8 text-center text-white/40">لا يوجد منتجات في المتجر</td></tr>
+                  ) : (
+                    products.map((product) => (
+                      <tr key={product.id} className="hover:bg-white/5 transition-colors group">
+                        <td className="p-5 flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-white/10 overflow-hidden">
+                            <img src={product.imageUrl || 'https://picsum.photos/100/100'} alt={product.name} className="w-full h-full object-cover" />
+                          </div>
+                          <span className="font-bold">{product.name}</span>
+                        </td>
+                        <td className="p-5 text-white/60">{product.category || 'غير مصنف'}</td>
+                        <td className="p-5 font-bold text-primary">{product.price} ج.م</td>
+                        <td className="p-5">
+                          <span className="bg-green-500/20 text-green-400 px-2 py-1 rounded-md text-xs font-bold">متوفر ({product.stock})</span>
+                        </td>
+                        <td className="p-5">
+                          <div className="flex items-center justify-center gap-2 opacity-50 group-hover:opacity-100 transition-opacity">
+                            <button className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center hover:bg-blue-500/40 transition-colors">
+                              <Pencil size={14} />
+                            </button>
+                            <button className="w-8 h-8 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center hover:bg-red-500/40 transition-colors">
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
