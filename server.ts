@@ -6,11 +6,23 @@ import { fileURLToPath } from "url";
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 
-// Initialize Firebase Admin
-const serviceAccount = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'service-account.json'), 'utf-8'));
-initializeApp({
-  credential: cert(serviceAccount)
-});
+// Initialize Firebase Admin gracefully
+let adminInitialized = false;
+try {
+  const serviceAccountPath = path.resolve(process.cwd(), 'service-account.json');
+  if (fs.existsSync(serviceAccountPath)) {
+    const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'));
+    initializeApp({
+      credential: cert(serviceAccount)
+    });
+    adminInitialized = true;
+    console.log("Firebase Admin initialized successfully.");
+  } else {
+    console.warn("service-account.json not found. Admin features will be disabled. Please upload it if you need the 'Change Password' feature.");
+  }
+} catch (error) {
+  console.error("Failed to initialize Firebase Admin:", error);
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,6 +33,10 @@ async function startServer() {
 
   // Admin route to update password
   app.post('/api/admin/change-password', async (req, res) => {
+    if (!adminInitialized) {
+      return res.status(503).json({ error: 'ميزة تغيير كلمة المرور غير مفعلة حالياً بسبب فقدان ملف الإعدادات (service-account.json).' });
+    }
+
     const { email, newPassword, adminSecret } = req.body;
     
     // Simple secret check (should be more secure in real production)
