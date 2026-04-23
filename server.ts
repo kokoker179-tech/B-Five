@@ -28,14 +28,21 @@ async function startServer() {
       return res.status(403).json({ error: 'Unauthorized' });
     }
 
+    if (!email) {
+      return res.status(400).json({ error: 'البريد الإلكتروني للعميل غير متوفر.' });
+    }
+
     try {
-      const userRecord = await getAuth().getUserByEmail(email);
+      const userRecord = await getAuth().getUserByEmail(email.trim());
       await getAuth().updateUser(userRecord.uid, {
         password: newPassword
       });
       res.json({ success: true, message: 'Password updated successfully' });
     } catch (error: any) {
       console.error('Error updating password:', error);
+      if (error.code === 'auth/user-not-found') {
+        return res.status(404).json({ error: 'هذا الحساب محذوف من خوادم المصادقة (Auth).' });
+      }
       res.status(500).json({ error: error.message });
     }
   });
