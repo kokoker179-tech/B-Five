@@ -4,7 +4,7 @@ import { initializeFirestore, doc, setDoc, addDoc, collection, serverTimestamp, 
 import firebaseConfig from '../../firebase-applet-config.json';
 
 // Supress connection warnings
-setLogLevel('error');
+setLogLevel('debug');
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

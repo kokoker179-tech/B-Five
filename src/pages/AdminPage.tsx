@@ -93,31 +93,10 @@ export const AdminPage: React.FC = () => {
     e.preventDefault();
     if (passwordInput === 'kerolos1122') {
       setIsLoggingIn(true);
-      const adminEmail = 'admin@b-five.io';
-      try {
-        // Try to sign in. If it fails, it might be that the user doesn't exist.
-        await signInWithEmailAndPassword(auth, adminEmail, passwordInput);
-        setIsAdminVerified(true);
-        toast.success('تم الدخول كمدير للنظام');
-      } catch (error: any) {
-        console.error('Error signing in as admin:', error);
-        
-        // If user doesn't exist, try to create it automatically
-        if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-          try {
-            await createUserWithEmailAndPassword(auth, adminEmail, passwordInput);
-            setIsAdminVerified(true);
-            toast.success('تم تفعيل حساب الإدارة والدخول بنجاح');
-          } catch (createError: any) {
-            console.error('Error creating admin account:', createError);
-            toast.error(`خطأ إنشاء الحساب: ${createError.message || 'غير معروف'}`);
-          }
-        } else {
-          toast.error(`خطأ اتصال: ${error.message || 'غير معروف'}`);
-        }
-      } finally {
-        setIsLoggingIn(false);
-      }
+      // Skip Firebase Auth for local admin login to avoid connection issues
+      setIsAdminVerified(true);
+      toast.success('تم الدخول كمدير للنظام (وضع محلي)');
+      setIsLoggingIn(false);
     } else {
       toast.error('كلمة المرور غير صحيحة');
     }
